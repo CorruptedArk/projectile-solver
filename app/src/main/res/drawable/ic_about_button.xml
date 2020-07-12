@@ -1,0 +1,44 @@
+<!--
+  Projectile Solver is an Android application to solve projectile systems with constant acceleration.
+  In order to solve any system, 3 of 5 known variables are required.
+  However, this program does not care which 3 are provided.
+      Copyright (C) 2020  Noah Stanford <noahstandingford@gmail.com>
+
+      Projectile Solver is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Projectile Solver is distributed in the hope that it will be useful and educational,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="26.458332"
+    android:viewportHeight="26.458334">
+  <path
+      android:pathData="M2.2722,13.2292a10.957,10.957 0,1 0,21.914 0a10.957,10.957 0,1 0,-21.914 0z"
+      android:strokeAlpha="0.993909"
+      android:strokeWidth="1.89849"
+      android:fillColor="#00000000"
+      android:strokeColor="#ffffff"
+      android:fillAlpha="0.993909"/>
+  <path
+      android:pathData="M11.3377,11.6839L15.1207,11.6839A0.4898,0.4898 0,0 1,15.6104 12.1736L15.6104,20.5409A0.4898,0.4898 0,0 1,15.1207 21.0307L11.3377,21.0307A0.4898,0.4898 0,0 1,10.8479 20.5409L10.8479,12.1736A0.4898,0.4898 0,0 1,11.3377 11.6839z"
+      android:strokeWidth="2.24963"
+      android:fillColor="#ffffff"
+      android:strokeColor="#00000000"
+      android:fillAlpha="1"/>
+  <path
+      android:pathData="M13.2292,7.8089m-2.3812,0a2.3812,2.3812 0,1 1,4.7625 0a2.3812,2.3812 0,1 1,-4.7625 0"
+      android:strokeWidth="1.98291"
+      android:fillColor="#ffffff"
+      android:strokeColor="#00000000"
+      android:fillAlpha="1"/>
+</vector>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Projectile Solver is an Android application to solve projectile systems with constant acceleration.
+  In order to solve any system, 3 of 5 known variables are required.
+  However, this program does not care which 3 are provided.
+      Copyright (C) 2020  Noah Stanford <noahstandingford@gmail.com>
+
+      Projectile Solver is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Projectile Solver is distributed in the hope that it will be useful and educational,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#494949"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:id="@+id/mainScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_above="@id/buttonBar"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/initVelLabel"
+                    android:text="@string/initial_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/initVelBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/finalVelLabel"
+                    android:text="@string/final_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/finalVelBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/displacementLabel"
+                    android:text="Displacement Δx = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/displacementBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/accelerationLabel"
+                    android:text="Acceleration a = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/accelerationBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/timeLabel"
+                    android:text="Duration t = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/timeBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/buttonBar"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        style="?android:attr/buttonBarStyle">
+        <Button
+            android:id="@+id/solveButton"
+            android:text="SOLVE"
+            android:onClick="solveSystem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="0.5"
+            android:textColor="#DBDBDB"
+            android:background="#ff242424"
+            android:layout_marginRight="1dp"/>
+        <Button
+            android:id="@+id/clearButton"
+            android:text="CLEAR"
+            android:onClick="clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="0.5"
+            android:textColor="#DBDBDB"
+            android:background="#ff242424"
+            android:layout_marginLeft="1dp"/>
+    </LinearLayout>
+</RelativeLayout>
