@@ -114,7 +114,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/accelerationLabel"
-                    android:text="Acceleration a = "
+                    android:text="Acceleration α = "
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textSize="20sp"

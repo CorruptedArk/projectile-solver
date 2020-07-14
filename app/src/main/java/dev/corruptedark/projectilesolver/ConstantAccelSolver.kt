@@ -240,7 +240,7 @@ class ConstantAccelSolver {
 
         this.displacement = displacement
         this.acceleration = acceleration
-        this.time = time
+        this.time = duration
         this.initVelocity = (displacement - .5 * acceleration * Math.pow(duration, 2.0)) / duration
         this.finalVelocity = (displacement + .5 * acceleration * Math.pow(duration, 2.0)) / duration
     }
