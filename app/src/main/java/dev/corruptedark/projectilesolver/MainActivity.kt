@@ -46,6 +46,9 @@ class MainActivity : AppCompatActivity()
         actionBar!!.subtitle = "Main"
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
+        precisionPicker.minValue = 1
+        precisionPicker.maxValue = Int.MAX_VALUE
+        precisionPicker.wrapSelectorWheel = false
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean
@@ -111,28 +114,30 @@ class MainActivity : AppCompatActivity()
                 areAllNull(listOf(initVelocity, finalVelocity)) -> accelSolver.findInitVelAndFinalVel(displacement!!, acceleration!!, time!!)
             }
 
+            val singleFormat = "%." + precisionPicker.value + "f"
+            val multiFormat = "%." + precisionPicker.value + "f, %." + precisionPicker.value + "f"
             val initVelocities = accelSolver.getInitVelocities()
             if (initVelocities.size > 1)
-                initVelBox.setText(String.format("%.2f, %.2f", initVelocities[0], initVelocities[1]))
+                initVelBox.setText(String.format(multiFormat, initVelocities[0], initVelocities[1]))
             else
-                initVelBox.setText(String.format("%.2f", initVelocities[0]))
+                initVelBox.setText(String.format(singleFormat, initVelocities[0]))
 
             val finalVelocities = accelSolver.getFinalVelocities()
             if (finalVelocities.size > 1)
-                finalVelBox.setText(String.format("%.2f, %.2f", finalVelocities[0], finalVelocities[1]))
+                finalVelBox.setText(String.format(multiFormat, finalVelocities[0], finalVelocities[1]))
             else
-                finalVelBox.setText(String.format("%.2f", finalVelocities[0]))
+                finalVelBox.setText(String.format(singleFormat, finalVelocities[0]))
 
-            displacementBox.setText(String.format("%.2f",accelSolver.getDisplacement()))
+            displacementBox.setText(String.format(singleFormat,accelSolver.getDisplacement()))
 
-            accelerationBox.setText(String.format("%.2f", accelSolver.getAcceleration()))
+            accelerationBox.setText(String.format(singleFormat, accelSolver.getAcceleration()))
 
             val times = accelSolver.getTimes()
 
             if(times.size > 1)
-                timeBox.setText(String.format("%.2f, %.2f", times[0], times[1]))
+                timeBox.setText(String.format(multiFormat, times[0], times[1]))
             else
-                timeBox.setText(String.format("%.2f", times[0]))
+                timeBox.setText(String.format(singleFormat, times[0]))
         }
     }
 
