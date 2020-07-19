@@ -29,7 +29,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.ViewGroup
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.NumberPicker
 import android.widget.Toast
+import androidx.core.view.children
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -43,7 +48,7 @@ class MainActivity : AppCompatActivity()
         setContentView(R.layout.activity_main)
 
         val actionBar = supportActionBar
-        actionBar!!.subtitle = "Main"
+        actionBar!!.subtitle = "1D Solver"
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
         precisionPicker.minValue = 1
@@ -53,7 +58,7 @@ class MainActivity : AppCompatActivity()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean
     {
-        menuInflater.inflate(R.menu.menu, menu)
+        menuInflater.inflate(R.menu.main_menu, menu)
         return true
     }
 
@@ -61,12 +66,19 @@ class MainActivity : AppCompatActivity()
         when(item.itemId)
         {
             R.id.aboutItem -> {openAboutActivity(); return true}
+            R.id.twoDimensionsItem -> {openTwoDimensionActivity(); return true}
             else -> return super.onOptionsItemSelected(item)
         }
 
     }
 
-    fun openAboutActivity()
+    private fun openTwoDimensionActivity()
+    {
+        val intent = Intent(this, TwoDimensionsActivity::class.java)
+        startActivity(intent)
+    }
+
+    private fun openAboutActivity()
     {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
@@ -80,7 +92,7 @@ class MainActivity : AppCompatActivity()
         val accelerationString = accelerationBox.text.toString()
         val timeString = timeBox.text.toString()
 
-        var values = mutableListOf(initVelocityString, finalVelocityString, displacementString, accelerationString, timeString)
+        val values = mutableListOf(initVelocityString, finalVelocityString, displacementString, accelerationString, timeString)
 
         var emptyCount = 0
         for (value in values)
@@ -114,34 +126,27 @@ class MainActivity : AppCompatActivity()
                 areAllNull(listOf(initVelocity, finalVelocity)) -> accelSolver.findInitVelAndFinalVel(displacement!!, acceleration!!, time!!)
             }
 
-            val singleFormat = "%." + precisionPicker.value + "f"
-            val multiFormat = "%." + precisionPicker.value + "f, %." + precisionPicker.value + "f"
-            val initVelocities = accelSolver.getInitVelocities()
-            if (initVelocities.size > 1)
-                initVelBox.setText(String.format(multiFormat, initVelocities[0], initVelocities[1]))
-            else
-                initVelBox.setText(String.format(singleFormat, initVelocities[0]))
-
-            val finalVelocities = accelSolver.getFinalVelocities()
-            if (finalVelocities.size > 1)
-                finalVelBox.setText(String.format(multiFormat, finalVelocities[0], finalVelocities[1]))
-            else
-                finalVelBox.setText(String.format(singleFormat, finalVelocities[0]))
-
-            displacementBox.setText(String.format(singleFormat,accelSolver.getDisplacement()))
-
-            accelerationBox.setText(String.format(singleFormat, accelSolver.getAcceleration()))
-
-            val times = accelSolver.getTimes()
-
-            if(times.size > 1)
-                timeBox.setText(String.format(multiFormat, times[0], times[1]))
-            else
-                timeBox.setText(String.format(singleFormat, times[0]))
+            initVelBox.setText(formatOutputString(accelSolver.getInitVelocities()))
+            finalVelBox.setText(formatOutputString(accelSolver.getFinalVelocities()))
+            displacementBox.setText(formatOutputString(listOf(accelSolver.getDisplacement())))
+            accelerationBox.setText(formatOutputString(listOf(accelSolver.getAcceleration())))
+            timeBox.setText(formatOutputString(accelSolver.getTimes()))
         }
     }
 
-    private fun areAllNull(values: List<Any?>): Boolean
+    private fun formatOutputString(values: List<Double>): String
+    {
+        var multiFormat = "%." + precisionPicker.value + "f"
+
+        for (i in 1 until values.size)
+        {
+            multiFormat += ", %." + precisionPicker.value + "f"
+        }
+
+        return String.format(multiFormat, *values.toTypedArray())
+    }
+
+    private fun areAllNull(vararg values: Any?): Boolean
     {
         var areNull = true
         for (value in values)
@@ -158,11 +163,25 @@ class MainActivity : AppCompatActivity()
 
     fun clear(view: View)
     {
-        initVelBox.text.clear()
-        finalVelBox.text.clear()
-        displacementBox.text.clear()
-        accelerationBox.text.clear()
-        timeBox.text.clear()
+        clearEditTextRecursive(view.rootView)
+    }
+
+    private fun clearEditTextRecursive(view: View)
+    {
+        when (view)
+        {
+            is NumberPicker -> {
+                return
+            }
+            is EditText -> {
+                view.text.clear()
+            }
+            is ViewGroup -> {
+                for (child in view.children) {
+                    clearEditTextRecursive(child)
+                }
+            }
+        }
     }
 
 }

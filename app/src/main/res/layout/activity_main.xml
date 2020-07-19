@@ -44,8 +44,32 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <TextView
+                    android:id="@+id/precisionLabel"
+                    android:text="Decimal places for results: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"/>
+
+                <NumberPicker
+                    android:id="@+id/precisionPicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textSize="20sp"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="right"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
                     android:id="@+id/initVelLabel"
-                    android:text="@string/initial_velocity"
+                    android:text="@string/initial_x_velocity"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textSize="20sp"
@@ -68,7 +92,7 @@
                 android:layout_height="wrap_content">
                 <TextView
                     android:id="@+id/finalVelLabel"
-                    android:text="@string/final_velocity"
+                    android:text="@string/final_x_velocity"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:textSize="20sp"
@@ -152,30 +176,6 @@
                     android:textSize="20sp"
                     android:textColor="#00A2FF"
                     android:textColorHint="#00A2FF"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:orientation="horizontal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/precisionLabel"
-                    android:text="Decimal places for results: "
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:textColor="#DBDBDB"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical"/>
-
-                <NumberPicker
-                    android:id="@+id/precisionPicker"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:textSize="20sp"
-                    android:theme="@style/AppTheme.Picker"
-                    android:layout_gravity="center_vertical|right"
-                    android:gravity="right"/>
             </LinearLayout>
 
         </LinearLayout>

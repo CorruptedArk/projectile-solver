@@ -19,8 +19,10 @@
       -->
 <resources>
     <string name="app_name">Projectile Solver</string>
-    <string name="initial_velocity">Initial velocity V₀ = </string>
-    <string name="final_velocity">Final velocity V₁ = </string>
+    <string name="initial_x_velocity">Initial velocity ˣV₀ = </string>
+    <string name="final_x_velocity">Final velocity ˣV₁ = </string>
+    <string name="initial_y_velocity">Initial velocity ʸV₀ = </string>
+    <string name="final_y_velocity">Final velocity ʸV₁ = </string>
     <string name="about_info">Version %1$s\nProjectile Solver is an Android application to solve projectile systems with constant acceleration.
 \nIn order to solve any system, 3 of 5 known variables are required. However, this program does not care which 3 are provided. Copyright © 2020  Noah Stanford noahstandingford@gmail.com
 \n
@@ -29,4 +31,5 @@
 \nProjectile Solver is distributed in the hope that it will be useful and educational, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 \n
 \nYou should have received a copy of the GNU General Public License along with this program.  If not, see https://www.gnu.org/licenses.</string>
+    <string name="about">ABOUT</string>
 </resources>

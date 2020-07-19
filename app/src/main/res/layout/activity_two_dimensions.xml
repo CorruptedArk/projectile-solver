@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Projectile Solver is an Android application to solve projectile systems with constant acceleration.
+  In order to solve any system, 3 of 5 known variables are required.
+  However, this program does not care which 3 are provided.
+      Copyright (C) 2020  Noah Stanford <noahstandingford@gmail.com>
+
+      Projectile Solver is free software: you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation, either version 3 of the License, or
+      (at your option) any later version.
+
+      Projectile Solver is distributed in the hope that it will be useful and educational,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+
+      You should have received a copy of the GNU General Public License
+      along with this program.  If not, see <https://www.gnu.org/licenses/>.
+      -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#494949"
+    tools:context=".TwoDimensionsActivity">
+
+    <ScrollView
+        android:id="@+id/twoDimensionScroll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:layout_above="@id/buttonBar2D"
+        android:layout_alignParentTop="true">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/precisionLabel"
+                    android:text="Decimal places for results: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"/>
+
+                <NumberPicker
+                    android:id="@+id/precisionPicker"
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:textSize="20sp"
+                    android:theme="@style/AppTheme.Picker"
+                    android:layout_gravity="center_vertical|right"
+                    android:gravity="right"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/initVelAngleCheck"
+                    android:layout_weight=".2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Use angle?"
+                    android:onClick="onCheckBoxClicked"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+
+                <EditText
+                    android:id="@+id/initVelAngleBox"
+                    android:visibility="gone"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_weight=".79"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+
+                <TextView
+                    android:id="@+id/initVelDegree"
+                    android:text="°"
+                    android:visibility="gone"
+                    android:layout_weight=".01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/initVelXLabel"
+                    android:text="@string/initial_x_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/initVelXBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/initVelYLabel"
+                    android:text="@string/initial_y_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/initVelYBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/finalVelAngleCheck"
+                    android:onClick="onCheckBoxClicked"
+                    android:layout_weight=".2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Use angle?"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/finalVelAngleBox"
+                    android:visibility="gone"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_weight=".79"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+
+                <TextView
+                    android:id="@+id/finalVelDegree"
+                    android:text="°"
+                    android:visibility="gone"
+                    android:layout_weight=".01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/finalVelXLabel"
+                    android:text="@string/final_x_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/finalVelXBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/finalVelYLabel"
+                    android:text="@string/final_y_velocity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/finalVelYBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/displacementAngleCheck"
+                    android:onClick="onCheckBoxClicked"
+                    android:layout_weight=".2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Use angle?"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/displacementAngleBox"
+                    android:visibility="gone"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_weight=".79"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+
+                <TextView
+                    android:id="@+id/displacementDegree"
+                    android:text="°"
+                    android:visibility="gone"
+                    android:layout_weight=".01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/displacementXLabel"
+                    android:text="Displacement Δx = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/displacementXBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/displacementYLabel"
+                    android:text="Displacement Δy = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/displacementYBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <CheckBox
+                    android:id="@+id/accelerationAngleCheck"
+                    android:onClick="onCheckBoxClicked"
+                    android:layout_weight=".2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Use angle?"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/accelerationAngleBox"
+                    android:visibility="gone"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_weight=".79"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF" />
+                <TextView
+                    android:id="@+id/accelerationDegree"
+                    android:text="°"
+                    android:visibility="gone"
+                    android:layout_weight=".01"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/accelerationXLabel"
+                    android:text="Acceleration αˣ = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/accelerationXBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/accelerationYLabel"
+                    android:text="Acceleration αʸ = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/accelerationYBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/timeLabel"
+                    android:text="Duration t = "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/timeBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:hint="\?"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
+
+
+    <LinearLayout
+        android:id="@+id/buttonBar2D"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        style="?android:attr/buttonBarStyle">
+        <Button
+            android:id="@+id/solveButton2D"
+            android:text="SOLVE"
+            android:onClick="solveSystem"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="0.5"
+            android:textColor="#DBDBDB"
+            android:background="#ff242424"
+            android:layout_marginRight="1dp"/>
+        <Button
+            android:id="@+id/clearButton2D"
+            android:text="CLEAR"
+            android:onClick="clear"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="?android:attr/buttonBarStyle"
+            android:layout_weight="0.5"
+            android:textColor="#DBDBDB"
+            android:background="#ff242424"
+            android:layout_marginLeft="1dp"/>
+    </LinearLayout>
+
+</RelativeLayout>

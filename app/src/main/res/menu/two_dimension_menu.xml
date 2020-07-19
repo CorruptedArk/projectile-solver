@@ -21,8 +21,12 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/aboutItem"
+        android:id="@+id/oneDimensionItem"
+        android:title="1D"
+        app:showAsAction="always"/>
+    <item
+        android:id="@+id/aboutItem2D"
         android:icon="@drawable/ic_about_button"
         app:showAsAction="ifRoom"
-        android:title="ABOUT" />
+        android:title="@string/about" />
 </menu>

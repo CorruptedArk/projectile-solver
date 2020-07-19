@@ -77,6 +77,37 @@ class ConstantAccelSolver {
         return times
     }
 
+    private fun areAllNull(vararg values: Any?): Boolean
+    {
+        var areNull = true
+        for (value in values)
+        {
+            if (value != null)
+            {
+                areNull = false
+                break
+            }
+        }
+
+        return areNull
+    }
+
+    fun findAllValues(initVelocity: Double?, finalVelocity: Double?, displacement: Double?, acceleration: Double?, time: Double?)
+    {
+        when {
+            areAllNull(finalVelocity, displacement) -> findFinalVelAndDisplacement(initVelocity!!, acceleration!!, time!!)
+            areAllNull(initVelocity, displacement) -> findInitVelAndDisplacement(finalVelocity!!, acceleration!!, time!!)
+            areAllNull(acceleration, displacement) -> findAccelerationAndDisplacement(initVelocity!!, finalVelocity!!, time!!)
+            areAllNull(time, displacement) -> findTimeAndDisplacement(initVelocity!!, finalVelocity!!, acceleration!!)
+            areAllNull(initVelocity, acceleration) -> findInitVelAndAcceleration(finalVelocity!!, displacement!!, time!!)
+            areAllNull(finalVelocity, acceleration) -> findFinalVelAndAcceleration(initVelocity!!, displacement!!, time!!)
+            areAllNull(time, acceleration) -> findTimeAndAcceleration(initVelocity!!, finalVelocity!!, displacement!!)
+            areAllNull(initVelocity, time) -> findInitVelAndTime(finalVelocity!!, displacement!!, acceleration!!)
+            areAllNull(finalVelocity, time) -> findFinalVelAndTime(initVelocity!!, displacement!!, acceleration!!)
+            areAllNull(initVelocity, finalVelocity) -> findInitVelAndFinalVel(displacement!!, acceleration!!, time!!)
+        }
+    }
+
     fun findFinalVelAndDisplacement(initVelocity: Double, acceleration: Double, duration: Double)
     {
         this.hasInitVelExt = false
