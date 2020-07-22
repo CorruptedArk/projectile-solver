@@ -115,18 +115,7 @@ class MainActivity : AppCompatActivity()
             val acceleration = accelerationString.toDoubleOrNull()
             val time = timeString.toDoubleOrNull()
 
-            when {
-                areAllNull(listOf(finalVelocity, displacement)) -> accelSolver.findFinalVelAndDisplacement(initVelocity!!, acceleration!!, time!!)
-                areAllNull(listOf(initVelocity, displacement)) -> accelSolver.findInitVelAndDisplacement(finalVelocity!!, acceleration!!, time!!)
-                areAllNull(listOf(acceleration, displacement)) -> accelSolver.findAccelerationAndDisplacement(initVelocity!!, finalVelocity!!, time!!)
-                areAllNull(listOf(time, displacement)) -> accelSolver.findTimeAndDisplacement(initVelocity!!, finalVelocity!!, acceleration!!)
-                areAllNull(listOf(initVelocity, acceleration)) -> accelSolver.findInitVelAndAcceleration(finalVelocity!!, displacement!!, time!!)
-                areAllNull(listOf(finalVelocity, acceleration)) -> accelSolver.findFinalVelAndAcceleration(initVelocity!!, displacement!!, time!!)
-                areAllNull(listOf(time, acceleration)) -> accelSolver.findTimeAndAcceleration(initVelocity!!, finalVelocity!!, displacement!!)
-                areAllNull(listOf(initVelocity, time)) -> accelSolver.findInitVelAndTime(finalVelocity!!, displacement!!, acceleration!!)
-                areAllNull(listOf(finalVelocity, time)) -> accelSolver.findFinalVelAndTime(initVelocity!!, displacement!!, acceleration!!)
-                areAllNull(listOf(initVelocity, finalVelocity)) -> accelSolver.findInitVelAndFinalVel(displacement!!, acceleration!!, time!!)
-            }
+            accelSolver.findAllValues(initVelocity, finalVelocity, displacement, acceleration, time)
 
             initVelBox.setText(formatOutputString(accelSolver.getInitVelocities()))
             finalVelBox.setText(formatOutputString(accelSolver.getFinalVelocities()))

@@ -27,6 +27,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.method.LinkMovementMethod
 import kotlinx.android.synthetic.main.activity_about.*
 
 class AboutActivity : AppCompatActivity() {
@@ -44,7 +45,10 @@ class AboutActivity : AppCompatActivity() {
         window.navigationBarColor = Color.parseColor("#ff151515")
 
         val versionName = BuildConfig.VERSION_NAME
+        githubLinkText.movementMethod = LinkMovementMethod.getInstance()
+        githubLinkText.linksClickable = true
         aboutText.text = resources.getString(R.string.about_info, versionName)
+
     }
 
     override fun onSupportNavigateUp(): Boolean {
