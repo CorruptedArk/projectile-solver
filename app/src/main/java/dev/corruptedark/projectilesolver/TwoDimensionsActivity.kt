@@ -35,6 +35,8 @@ class TwoDimensionsActivity : AppCompatActivity() {
         precisionPicker.maxValue = Int.MAX_VALUE
         precisionPicker.wrapSelectorWheel = false
 
+        window.navigationBarColor = Color.parseColor("#ff151515")
+
         solved = false
     }
 

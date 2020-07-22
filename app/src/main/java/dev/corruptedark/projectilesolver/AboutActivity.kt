@@ -24,6 +24,7 @@ package dev.corruptedark.projectilesolver
 import dev.corruptedark.projectilesolver.BuildConfig
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_about.*
@@ -39,6 +40,8 @@ class AboutActivity : AppCompatActivity() {
         actionBar!!.setDisplayHomeAsUpEnabled(true)
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
+
+        window.navigationBarColor = Color.parseColor("#ff151515")
 
         val versionName = BuildConfig.VERSION_NAME
         aboutText.text = resources.getString(R.string.about_info, versionName)

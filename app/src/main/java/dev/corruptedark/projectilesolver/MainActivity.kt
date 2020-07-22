@@ -54,6 +54,8 @@ class MainActivity : AppCompatActivity()
         precisionPicker.minValue = 1
         precisionPicker.maxValue = Int.MAX_VALUE
         precisionPicker.wrapSelectorWheel = false
+
+        window.navigationBarColor = Color.parseColor("#ff151515")
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean
