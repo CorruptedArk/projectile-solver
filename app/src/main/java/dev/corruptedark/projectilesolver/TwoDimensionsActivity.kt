@@ -8,6 +8,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.*
 import androidx.core.view.children
+import com.androidplot.xy.CatmullRomInterpolator
+import com.androidplot.xy.LineAndPointFormatter
+import com.androidplot.xy.SimpleXYSeries
+import com.androidplot.xy.XYSeries
 import kotlinx.android.synthetic.main.activity_main.precisionPicker
 import kotlinx.android.synthetic.main.activity_main.timeBox
 import kotlinx.android.synthetic.main.activity_two_dimensions.*
@@ -22,7 +26,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
     private val xAccelSolver = ConstantAccelSolver()
     private val yAccelSolver = ConstantAccelSolver()
 
-    var solved = false
+    private var solved = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_two_dimensions)
@@ -38,6 +42,21 @@ class TwoDimensionsActivity : AppCompatActivity() {
         window.navigationBarColor = Color.parseColor("#ff151515")
 
         solved = false
+
+        domainRadioGroup.check(R.id.timeDomainButton)
+        rangeRadioGroup.check(R.id.xDisplacementRangeButton)
+
+        domainRadioGroup.setOnCheckedChangeListener { _, _ ->
+            if (solved) {
+                updatePlot()
+            }
+        }
+
+        rangeRadioGroup.setOnCheckedChangeListener { _, _ ->
+            if (solved) {
+                updatePlot()
+            }
+        }
     }
 
     fun onCheckBoxClicked(view: View)
@@ -236,14 +255,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
     fun solveSystem(view: View)
     {
 
-        var initVelocityX: Double?
-        var initVelocityY: Double?
-        var finalVelocityX: Double?
-        var finalVelocityY: Double?
-        var displacementX: Double?
-        var displacementY: Double?
-        var accelerationX: Double?
-        var accelerationY: Double?
+        val initVelocityX: Double?
+        val initVelocityY: Double?
+        val finalVelocityX: Double?
+        val finalVelocityY: Double?
+        val displacementX: Double?
+        val displacementY: Double?
+        val accelerationX: Double?
+        val accelerationY: Double?
         var time: Double?
 
 
@@ -359,7 +378,6 @@ class TwoDimensionsActivity : AppCompatActivity() {
         //End counting how much is missing
 
         //Start finding correct strategy and solve or print error
-        //TODO: Format and display output
         when
         {
             xEmptyCount > 2 && yEmptyCount > 2 -> {
@@ -755,7 +773,140 @@ class TwoDimensionsActivity : AppCompatActivity() {
             }
         }
         //End finding correct strategy and solve or print error
+        if (solved)
+            updatePlot()
     }
+
+    private fun updatePlot()
+    {
+        twoDimensionPlot.clear()
+        val minDomain = domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
+        val maxDomain = domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
+
+        val formatter = LineAndPointFormatter(Color.parseColor("#00A2FF"), null, null, null)
+        formatter.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+
+        when(listOf(domainRadioGroup.checkedRadioButtonId, rangeRadioGroup.checkedRadioButtonId))
+        {
+            listOf(R.id.timeDomainButton, R.id.xDisplacementRangeButton) ->
+            {
+                twoDimensionPlot.addSeries(formatter, xAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
+                twoDimensionPlot.domainTitle.text = "Domain t"
+                twoDimensionPlot.rangeTitle.text = "Range Δx"
+            }
+            listOf(R.id.timeDomainButton, R.id.yDisplacementRangeButton) ->
+            {
+                twoDimensionPlot.addSeries(formatter, yAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δy vs t"))
+                twoDimensionPlot.domainTitle.text = "Domain t"
+                twoDimensionPlot.rangeTitle.text = "Range Δy"
+            }
+            listOf(R.id.xDisplacementDomainButton, R.id.xDisplacementRangeButton) ->
+            {
+                val samplesList = mutableListOf<Double>()
+                val size = 4
+                for (i in 0..size)
+                    samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
+
+                twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δx vs Δx"))
+                twoDimensionPlot.domainTitle.text = "Domain Δx"
+                twoDimensionPlot.rangeTitle.text = "Range Δx"
+            }
+            listOf(R.id.yDisplacementDomainButton, R.id.yDisplacementRangeButton) ->
+            {
+                val samplesList = mutableListOf<Double>()
+                val size = 4
+                for (i in 0..size)
+                    samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
+
+                twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δy vs Δy"))
+                twoDimensionPlot.domainTitle.text = "Domain Δy"
+                twoDimensionPlot.rangeTitle.text = "Range Δy"
+            }
+            listOf(R.id.timeDomainButton, R.id.xVelocityRangeButton) ->
+            {
+                twoDimensionPlot.addSeries(formatter, xAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ˣV vs t"))
+                twoDimensionPlot.domainTitle.text = "Domain t"
+                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+            }
+            listOf(R.id.timeDomainButton, R.id.yVelocityRangeButton) ->
+            {
+                twoDimensionPlot.addSeries(formatter, yAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ʸV vs t"))
+                twoDimensionPlot.domainTitle.text = "Domain t"
+                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+            }
+            listOf(R.id.xDisplacementDomainButton, R.id.xVelocityRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = xAccelSolver.getVelocityDisplacementXYSeries(minDomain, maxDomain, 100, "ˣV vs Δx")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δx"
+                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+            }
+            listOf(R.id.yDisplacementDomainButton, R.id.yVelocityRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = yAccelSolver.getVelocityDisplacementXYSeries(minDomain, maxDomain, 100, "ʸV vs Δy")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δy"
+                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+            }
+            listOf(R.id.xDisplacementDomainButton, R.id.yDisplacementRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = xAccelSolver.getDisplacementDisplacementTwoAxisXYSeries(yAccelSolver, minDomain, maxDomain, 100, "Δy vs Δx")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δx"
+                twoDimensionPlot.rangeTitle.text = "Range Δy"
+            }
+            listOf(R.id.yDisplacementDomainButton, R.id.xDisplacementRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = yAccelSolver.getDisplacementDisplacementTwoAxisXYSeries(xAccelSolver, minDomain, maxDomain, 100, "Δx vs Δy")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δy"
+                twoDimensionPlot.rangeTitle.text = "Range Δx"
+            }
+            listOf(R.id.xDisplacementDomainButton, R.id.yVelocityRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = xAccelSolver.getVelocityDisplacementTwoAxisXYSeries(yAccelSolver, minDomain, maxDomain, 100, "ʸV vs Δx")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δx"
+                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+            }
+            listOf(R.id.yDisplacementDomainButton, R.id.xVelocityRangeButton) ->
+            {
+                val formatter2 = LineAndPointFormatter(Color.MAGENTA, null, null, null)
+                formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
+
+                val seriesArray = yAccelSolver.getVelocityDisplacementTwoAxisXYSeries(xAccelSolver, minDomain, maxDomain, 100, "ˣV vs Δy")
+                twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                twoDimensionPlot.domainTitle.text = "Domain Δy"
+                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+            }
+            else -> twoDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
+        }
+
+        twoDimensionPlot.redraw()
+    }
+
 
     private fun formatOutputString(values: List<Double>): String
     {
@@ -773,6 +924,13 @@ class TwoDimensionsActivity : AppCompatActivity() {
     {
         clearEditTextRecursive(view.rootView)
         solved = false
+
+        domainMinBox.setText("-1")
+        domainMaxBox.setText("1")
+        twoDimensionPlot.domainTitle.text = ""
+        twoDimensionPlot.rangeTitle.text = ""
+        twoDimensionPlot.clear()
+        twoDimensionPlot.redraw()
     }
 
     private fun clearEditTextRecursive(view: View)

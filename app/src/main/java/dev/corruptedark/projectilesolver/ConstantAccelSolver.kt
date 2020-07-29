@@ -21,6 +21,7 @@ However, this program does not care which 3 are provided.
 
 package dev.corruptedark.projectilesolver
 
+import com.androidplot.xy.XYSeries
 
 class ConstantAccelSolver {
 
@@ -34,6 +35,34 @@ class ConstantAccelSolver {
     private var hasInitVelExt = false
     private var hasFinalVelExt = false
     private var hasTimeExt = false
+
+    fun getDisplacementDisplacementTwoAxisXYSeries(solver2: ConstantAccelSolver, minDomain: Double, maxDomain: Double, size: Int, title: String): Array<XYSeries>
+    {
+        return arrayOf(DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, title),
+            DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, title))
+    }
+
+    fun getVelocityDisplacementTwoAxisXYSeries(solver2: ConstantAccelSolver, minDomain: Double, maxDomain: Double, size: Int, title: String): Array<XYSeries>
+    {
+        return  arrayOf(DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, title),
+            DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, title))
+    }
+
+    fun getDisplacementTimeXYSeries(minTime: Double, maxTime: Double, size: Int, title: String): DisplacementTimeXYSeries
+    {
+        return DisplacementTimeXYSeries(acceleration, initVelocity, minTime, maxTime, size, title)
+    }
+
+    fun getVelocityTimeXYSeries(minTime: Double, maxTime: Double, size: Int, title: String): VelocityTimeXYSeries
+    {
+        return VelocityTimeXYSeries(acceleration, initVelocity, minTime, maxTime, size, title)
+    }
+
+    fun getVelocityDisplacementXYSeries(minDisplacement: Double, maxDisplacement: Double, size: Int, title: String): Array<XYSeries>
+    {
+        return arrayOf(VelocityDisplacementXYSeries(acceleration, initVelocity, minDisplacement, maxDisplacement, true, size, "+$title"),
+            VelocityDisplacementXYSeries(acceleration, initVelocity, minDisplacement, maxDisplacement, false, size, "-$title"))
+    }
 
     fun getInitVelocities(): MutableList<Double>
     {
@@ -108,7 +137,7 @@ class ConstantAccelSolver {
         }
     }
 
-    fun findFinalVelAndDisplacement(initVelocity: Double, acceleration: Double, duration: Double)
+    private fun findFinalVelAndDisplacement(initVelocity: Double, acceleration: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -121,7 +150,7 @@ class ConstantAccelSolver {
         this.displacement = initVelocity * duration + .5 * acceleration * Math.pow(duration, 2.0)
     }
 
-    fun findInitVelAndDisplacement(finalVelocity: Double, acceleration: Double, duration: Double)
+    private fun findInitVelAndDisplacement(finalVelocity: Double, acceleration: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -134,7 +163,7 @@ class ConstantAccelSolver {
         this.displacement = finalVelocity * duration - .5 * acceleration * Math.pow(duration, 2.0)
     }
 
-    fun findAccelerationAndDisplacement(initVelocity: Double, finalVelocity: Double, duration: Double)
+    private fun findAccelerationAndDisplacement(initVelocity: Double, finalVelocity: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -147,7 +176,7 @@ class ConstantAccelSolver {
         this.acceleration = (finalVelocity - initVelocity) / duration
     }
 
-    fun findTimeAndDisplacement(initVelocity: Double, finalVelocity: Double, acceleration: Double)
+    private fun findTimeAndDisplacement(initVelocity: Double, finalVelocity: Double, acceleration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -160,7 +189,7 @@ class ConstantAccelSolver {
         this.displacement = (Math.pow(finalVelocity, 2.0) - Math.pow(initVelocity, 2.0)) / (2.0*acceleration)
     }
 
-    fun findInitVelAndAcceleration(finalVelocity: Double, displacement: Double, duration: Double)
+    private fun findInitVelAndAcceleration(finalVelocity: Double, displacement: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -173,7 +202,7 @@ class ConstantAccelSolver {
         this.acceleration = 2.0 * (finalVelocity * duration - displacement) / Math.pow(duration, 2.0)
     }
 
-    fun findFinalVelAndAcceleration(initVelocity: Double, displacement: Double, duration: Double)
+    private fun findFinalVelAndAcceleration(initVelocity: Double, displacement: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -186,7 +215,7 @@ class ConstantAccelSolver {
         this.acceleration = 2.0 * (displacement - initVelocity * duration) / Math.pow(duration, 2.0)
     }
 
-    fun findTimeAndAcceleration(initVelocity: Double, finalVelocity: Double, displacement: Double)
+    private fun findTimeAndAcceleration(initVelocity: Double, finalVelocity: Double, displacement: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false
@@ -199,7 +228,7 @@ class ConstantAccelSolver {
         this.time = 2.0 * displacement / (finalVelocity + initVelocity)
     }
 
-    fun findInitVelAndTime(finalVelocity: Double, displacement: Double, acceleration: Double)
+    private fun findInitVelAndTime(finalVelocity: Double, displacement: Double, acceleration: Double)
     {
         this.hasInitVelExt = true
         this.hasFinalVelExt = false
@@ -231,7 +260,7 @@ class ConstantAccelSolver {
         }
     }
 
-    fun findFinalVelAndTime(initVelocity: Double, displacement: Double, acceleration: Double)
+    private fun findFinalVelAndTime(initVelocity: Double, displacement: Double, acceleration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = true
@@ -263,7 +292,7 @@ class ConstantAccelSolver {
         }
     }
 
-    fun findInitVelAndFinalVel(displacement: Double, acceleration: Double, duration: Double)
+    private fun findInitVelAndFinalVel(displacement: Double, acceleration: Double, duration: Double)
     {
         this.hasInitVelExt = false
         this.hasFinalVelExt = false

@@ -178,6 +178,125 @@
                     android:textColorHint="#00A2FF"/>
             </LinearLayout>
 
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/domainMinLabel"
+                    android:text="Graph domain min: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/domainMinBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:text="-1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/domainMaxLabel"
+                    android:text="Graph domain max: "
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:textSize="20sp"
+                    android:textColor="#DBDBDB"/>
+                <EditText
+                    android:id="@+id/domainMaxBox"
+                    android:inputType="numberDecimal|numberSigned"
+                    android:text="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:textSize="20sp"
+                    android:textColor="#00A2FF"
+                    android:textColorHint="#00A2FF"/>
+            </LinearLayout>
+
+            <RadioGroup
+                android:id="@+id/domainRadioGroup"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Domain: "
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white" />
+
+                <RadioButton
+                    android:id="@+id/timeDomainButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white"
+                    android:text="Time"/>
+
+                <RadioButton
+                    android:id="@+id/displacementDomainButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white"
+                    android:text="Displacement"/>
+            </RadioGroup>
+
+            <RadioGroup
+                android:id="@+id/rangeRadioGroup"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Range: "
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white" />
+
+                <RadioButton
+                    android:id="@+id/displacementRangeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white"
+                    android:text="Displacement"/>
+
+                <RadioButton
+                    android:id="@+id/velocityRangeButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="@color/ap_white"
+                    android:text="Velocity"/>
+            </RadioGroup>
+
+
+            <com.androidplot.xy.XYPlot
+                android:id="@+id/oneDimensionPlot"
+                app:renderMode="use_background_thread"
+                style="@style/APDefacto.Dark"
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                app:gridBackgroundColor="#ff242424"
+                app:backgroundColor="#ff242424"
+                app:domainTitleTextColor="#00A2FF"
+                app:domainTitleTextSize="20sp"
+                app:rangeTitleTextColor="#00A2FF"
+                app:rangeTitleTextSize="20sp"
+                app:borderThickness="0dp"/>
+
         </LinearLayout>
     </ScrollView>
 
