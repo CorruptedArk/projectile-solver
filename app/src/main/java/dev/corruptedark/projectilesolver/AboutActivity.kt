@@ -17,7 +17,7 @@ However, this program does not care which 3 are provided.
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+*/
 
 package dev.corruptedark.projectilesolver
 

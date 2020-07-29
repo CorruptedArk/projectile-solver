@@ -17,7 +17,7 @@ However, this program does not care which 3 are provided.
 
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <https://www.gnu.org/licenses/>.
- */
+*/
 
 package dev.corruptedark.projectilesolver
 
@@ -38,14 +38,14 @@ class ConstantAccelSolver {
 
     fun getDisplacementDisplacementTwoAxisXYSeries(solver2: ConstantAccelSolver, minDomain: Double, maxDomain: Double, size: Int, title: String): Array<XYSeries>
     {
-        return arrayOf(DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, title),
-            DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, title))
+        return arrayOf(DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, "+$title"),
+            DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, "-$title"))
     }
 
     fun getVelocityDisplacementTwoAxisXYSeries(solver2: ConstantAccelSolver, minDomain: Double, maxDomain: Double, size: Int, title: String): Array<XYSeries>
     {
-        return  arrayOf(DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, title),
-            DisplacementDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, title))
+        return  arrayOf(VelocityDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, true, size, "+$title"),
+            VelocityDisplacementTwoAxisXYSeries(this.acceleration, solver2.acceleration, this.initVelocity, solver2.initVelocity, minDomain, maxDomain, false, size, "-$title"))
     }
 
     fun getDisplacementTimeXYSeries(minTime: Double, maxTime: Double, size: Int, title: String): DisplacementTimeXYSeries
@@ -66,7 +66,7 @@ class ConstantAccelSolver {
 
     fun getInitVelocities(): MutableList<Double>
     {
-        var velocities = mutableListOf(initVelocity)
+        val velocities = mutableListOf(initVelocity)
         if (hasInitVelExt){
             velocities.add(initVelocityExt)
         }
@@ -76,7 +76,7 @@ class ConstantAccelSolver {
 
     fun getFinalVelocities(): MutableList<Double>
     {
-        var velocities = mutableListOf(finalVelocity)
+        val velocities = mutableListOf(finalVelocity)
         if (hasFinalVelExt){
             velocities.add(finalVelocityExt)
         }
@@ -96,7 +96,7 @@ class ConstantAccelSolver {
 
     fun getTimes(): MutableList<Double>
     {
-        var times = mutableListOf(time)
+        val times = mutableListOf(time)
 
         if (hasTimeExt)
         {

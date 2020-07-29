@@ -151,18 +151,27 @@ class MainActivity : AppCompatActivity()
         val minDomain = domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
         val maxDomain = domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
 
-        val series: Array<XYSeries>
         val formatter = LineAndPointFormatter(Color.parseColor("#00A2FF"), null, null, null)
         formatter.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
-
+        val pointLabelFormatter = PointLabelFormatter(Color.WHITE)
+        val pointFormatter = LineAndPointFormatter(null, Color.WHITE, null, pointLabelFormatter)
         when(listOf(domainRadioGroup.checkedRadioButtonId, rangeRadioGroup.checkedRadioButtonId))
         {
             listOf(R.id.timeDomainButton, R.id.displacementRangeButton) ->
             {
-                oneDimensionPlot.addSeries(formatter,accelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Displacement vs Time"))
+                oneDimensionPlot.addSeries(formatter,accelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
                 oneDimensionPlot.domainTitle.text = "Domain t"
                 oneDimensionPlot.rangeTitle.text = "Range Δx"
+
+
+                val yList = mutableListOf<Double>()
+                for (time in accelSolver.getTimes())
+                    yList.add(accelSolver.getDisplacement())
+
+                val pointSeries = SimpleXYSeries(accelSolver.getTimes(), yList, "")
+
+                oneDimensionPlot.addSeries(pointSeries, pointFormatter)
             }
             listOf(R.id.displacementDomainButton, R.id.displacementRangeButton) ->
             {
@@ -171,15 +180,28 @@ class MainActivity : AppCompatActivity()
                 for (i in 0..size)
                    samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
 
-                oneDimensionPlot.addSeries(formatter, SimpleXYSeries( samplesList,  samplesList, "Displacement vs Displacement"))
+                oneDimensionPlot.addSeries(formatter, SimpleXYSeries( samplesList,  samplesList, "Δx vs Δx"))
                 oneDimensionPlot.domainTitle.text = "Domain Δx"
                 oneDimensionPlot.rangeTitle.text = "Range Δx"
+
+
+                val pointSeries = SimpleXYSeries(mutableListOf(accelSolver.getDisplacement()), mutableListOf(accelSolver.getDisplacement()), "")
+
+                oneDimensionPlot.addSeries(pointSeries, pointFormatter)
             }
             listOf(R.id.timeDomainButton, R.id.velocityRangeButton) ->
             {
-                oneDimensionPlot.addSeries(formatter, accelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "Velocity vs Time"))
+                oneDimensionPlot.addSeries(formatter, accelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "V vs t"))
                 oneDimensionPlot.domainTitle.text = "Domain t"
                 oneDimensionPlot.rangeTitle.text = "Range V"
+
+                val pointSeries = SimpleXYSeries("")
+
+                for (time in accelSolver.getTimes())
+                    for (velocity in accelSolver.getFinalVelocities())
+                        pointSeries.addLast(time, velocity)
+
+                oneDimensionPlot.addSeries(pointSeries, pointFormatter)
             }
             listOf(R.id.displacementDomainButton, R.id.velocityRangeButton) ->
             {
@@ -191,6 +213,14 @@ class MainActivity : AppCompatActivity()
                 oneDimensionPlot.addSeries (formatter2, seriesArray.last())
                 oneDimensionPlot.domainTitle.text = "Domain Δx"
                 oneDimensionPlot.rangeTitle.text = "Range V"
+
+                val xList = mutableListOf<Double>()
+                for (velocity in accelSolver.getFinalVelocities())
+                    xList.add(accelSolver.getDisplacement())
+
+                val pointSeries = SimpleXYSeries(xList, accelSolver.getFinalVelocities(), "")
+
+                oneDimensionPlot.addSeries(pointSeries, pointFormatter)
             }
             else -> oneDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
         }
