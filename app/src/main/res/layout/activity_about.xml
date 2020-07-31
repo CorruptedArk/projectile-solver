@@ -46,7 +46,8 @@
                 android:layout_height="wrap_content"
                 android:text="@string/github_link"
                 android:textSize="15sp"
-                android:linksClickable="true"/>
+                android:linksClickable="true"
+                android:textColorLink="#00A2FF"/>
             <TextView
                 android:id="@+id/aboutText"
                 android:textColor="@android:color/white"
@@ -55,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:autoLink="all"
                 android:textSize="15sp"
-                android:linksClickable="true"/>
+                android:linksClickable="true"
+                android:textColorLink="#00A2FF"/>
         </LinearLayout>
     </ScrollView>
 
