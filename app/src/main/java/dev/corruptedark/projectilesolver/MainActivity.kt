@@ -82,27 +82,40 @@ class MainActivity : AppCompatActivity()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId)
-        {
-            R.id.aboutItem -> {openAboutActivity(); return true}
-            R.id.twoDimensionsItem -> {openTwoDimensionActivity(); return true}
-            else -> return super.onOptionsItemSelected(item)
+        return when(item.itemId) {
+            R.id.aboutItem -> {openAboutActivity(); true
+            }
+            R.id.twoDimensionsItem -> {openTwoDimensionActivity(); true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
 
     }
 
+
+    /**
+     * Starts an instance of TwoDimensionsActivity
+     */
     private fun openTwoDimensionActivity()
     {
         val intent = Intent(this, TwoDimensionsActivity::class.java)
         startActivity(intent)
     }
 
+    /**
+     * Starts an instance of AboutActivity
+     */
     private fun openAboutActivity()
     {
         val intent = Intent(this, AboutActivity::class.java)
         startActivity(intent)
     }
 
+    /**
+     * Solves the projectile system represented by the values in the text fields and then fills in the missing values in the UI.
+     *
+     * @param [view] The required view parameter to use in a view's onClick. Unused by this function.
+     */
     fun solveSystem(view: View)
     {
         val initVelocityString = initVelBox.text.toString()
@@ -145,6 +158,10 @@ class MainActivity : AppCompatActivity()
         }
     }
 
+    /**
+     * Redraws [oneDimensionPlot] with the with a value graph selected by [domainRadioGroup] and [rangeRadioGroup].
+     * All graphs are modeled by [accelSolver] and the window bounds are set by [domainMinBox] and [domainMaxBox] along with the min and max range values of each series.
+     */
     private fun updatePlot()
     {
         oneDimensionPlot.clear()
@@ -228,7 +245,12 @@ class MainActivity : AppCompatActivity()
         oneDimensionPlot.redraw()
     }
 
-
+    /**
+     * Creates a formatted String for outputting solved values.
+     * Precision is set by [precisionPicker].
+     * @param [values] The list of Double values to formatted
+     * @return String of formatted values
+     */
     private fun formatOutputString(values: List<Double>): String
     {
         var multiFormat = "%." + precisionPicker.value + "f"
@@ -241,12 +263,18 @@ class MainActivity : AppCompatActivity()
         return String.format(multiFormat, *values.toTypedArray())
     }
 
-    private fun areAllNull(vararg values: Any?): Boolean
+    /**
+     * Checks if all arguments passed are null.
+     *
+     * @param [items] A vararg containing all arguments passed.
+     * @return true if all are null, false otherwise
+     */
+    private fun areAllNull(vararg items: Any?): Boolean
     {
         var areNull = true
-        for (value in values)
+        for (item in items)
         {
-            if (value != null)
+            if (item != null)
             {
                 areNull = false
                 break
@@ -256,6 +284,11 @@ class MainActivity : AppCompatActivity()
         return areNull
     }
 
+    /**
+     * Returns all EditText fields and [oneDimensionPlot] to their default states.
+     *
+     * @param [view] The required view parameter to use in a view's onClick. Unused by this function.
+     */
     fun clear(view: View)
     {
         clearEditTextRecursive(view.rootView)
@@ -269,6 +302,12 @@ class MainActivity : AppCompatActivity()
         oneDimensionPlot.redraw()
     }
 
+    /**
+     * Recursively clears text from [view] and its children if it is an EditText or EditText subclass.
+     * Deliberately leaves NumberPicker views alone.
+     *
+     * @param [view] The root view of the view tree to be cleared.
+     */
     private fun clearEditTextRecursive(view: View)
     {
         when (view)
