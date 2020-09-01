@@ -35,6 +35,7 @@ import android.widget.*
 import androidx.core.view.children
 import com.androidplot.util.PixelUtils
 import com.androidplot.xy.*
+import dev.corruptedark.projectilesolver.databinding.ActivityMainBinding
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.abs
 
@@ -43,32 +44,34 @@ class MainActivity : AppCompatActivity()
 {
     private val accelSolver = ConstantAccelSolver()
     private var solved = false
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?)
     {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val actionBar = supportActionBar
         actionBar!!.subtitle = "1D Solver"
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
-        precisionPicker.minValue = 1
-        precisionPicker.maxValue = Int.MAX_VALUE
-        precisionPicker.wrapSelectorWheel = false
+        binding.precisionPicker.minValue = 1
+        binding.precisionPicker.maxValue = Int.MAX_VALUE
+        binding.precisionPicker.wrapSelectorWheel = false
 
         window.navigationBarColor = Color.parseColor("#ff151515")
 
-        domainRadioGroup.check(R.id.timeDomainButton)
-        rangeRadioGroup.check(R.id.displacementRangeButton)
+        binding.domainRadioGroup.check(R.id.timeDomainButton)
+        binding.rangeRadioGroup.check(R.id.displacementRangeButton)
 
-        domainRadioGroup.setOnCheckedChangeListener { _, _ ->
+        binding.domainRadioGroup.setOnCheckedChangeListener { _, _ ->
             if (solved) {
                 updatePlot()
             }
         }
 
-        rangeRadioGroup.setOnCheckedChangeListener { _, _ ->
+        binding.rangeRadioGroup.setOnCheckedChangeListener { _, _ ->
             if (solved) {
                 updatePlot()
             }
@@ -105,11 +108,11 @@ class MainActivity : AppCompatActivity()
 
     fun solveSystem(view: View)
     {
-        val initVelocityString = initVelBox.text.toString()
-        val finalVelocityString = finalVelBox.text.toString()
-        val displacementString = displacementBox.text.toString()
-        val accelerationString = accelerationBox.text.toString()
-        val timeString = timeBox.text.toString()
+        val initVelocityString = binding.initVelBox.text.toString()
+        val finalVelocityString = binding.finalVelBox.text.toString()
+        val displacementString = binding.displacementBox.text.toString()
+        val accelerationString = binding.accelerationBox.text.toString()
+        val timeString = binding.timeBox.text.toString()
 
         val values = mutableListOf(initVelocityString, finalVelocityString, displacementString, accelerationString, timeString)
 
@@ -134,11 +137,11 @@ class MainActivity : AppCompatActivity()
 
             accelSolver.findAllValues(initVelocity, finalVelocity, displacement, acceleration, time)
 
-            initVelBox.setText(formatOutputString(accelSolver.getInitVelocities()))
-            finalVelBox.setText(formatOutputString(accelSolver.getFinalVelocities()))
-            displacementBox.setText(formatOutputString(listOf(accelSolver.getDisplacement())))
-            accelerationBox.setText(formatOutputString(listOf(accelSolver.getAcceleration())))
-            timeBox.setText(formatOutputString(accelSolver.getTimes()))
+            binding.initVelBox.setText(formatOutputString(accelSolver.getInitVelocities()))
+            binding.finalVelBox.setText(formatOutputString(accelSolver.getFinalVelocities()))
+            binding.displacementBox.setText(formatOutputString(listOf(accelSolver.getDisplacement())))
+            binding.accelerationBox.setText(formatOutputString(listOf(accelSolver.getAcceleration())))
+            binding.timeBox.setText(formatOutputString(accelSolver.getTimes()))
 
             solved = true
             updatePlot()
@@ -147,22 +150,22 @@ class MainActivity : AppCompatActivity()
 
     private fun updatePlot()
     {
-        oneDimensionPlot.clear()
-        val minDomain = domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
-        val maxDomain = domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
+        binding.oneDimensionPlot.clear()
+        val minDomain = binding.domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
+        val maxDomain = binding.domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
 
         val formatter = LineAndPointFormatter(Color.parseColor("#00A2FF"), null, null, null)
         formatter.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
         /*val pointLabelFormatter = PointLabelFormatter(Color.WHITE)
         val pointFormatter = LineAndPointFormatter(null, Color.WHITE, null, pointLabelFormatter)*/
-        when(listOf(domainRadioGroup.checkedRadioButtonId, rangeRadioGroup.checkedRadioButtonId))
+        when(listOf(binding.domainRadioGroup.checkedRadioButtonId, binding.rangeRadioGroup.checkedRadioButtonId))
         {
             listOf(R.id.timeDomainButton, R.id.displacementRangeButton) ->
             {
-                oneDimensionPlot.addSeries(formatter,accelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
-                oneDimensionPlot.domainTitle.text = "Domain t"
-                oneDimensionPlot.rangeTitle.text = "Range Δx"
+                binding.oneDimensionPlot.addSeries(formatter,accelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
+                binding.oneDimensionPlot.domainTitle.text = "Domain t"
+                binding.oneDimensionPlot.rangeTitle.text = "Range Δx"
 
 
                 val yList = mutableListOf<Double>()
@@ -180,9 +183,9 @@ class MainActivity : AppCompatActivity()
                 for (i in 0..size)
                    samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
 
-                oneDimensionPlot.addSeries(formatter, SimpleXYSeries( samplesList,  samplesList, "Δx vs Δx"))
-                oneDimensionPlot.domainTitle.text = "Domain Δx"
-                oneDimensionPlot.rangeTitle.text = "Range Δx"
+                binding.oneDimensionPlot.addSeries(formatter, SimpleXYSeries( samplesList,  samplesList, "Δx vs Δx"))
+                binding.oneDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.oneDimensionPlot.rangeTitle.text = "Range Δx"
 
 
                 /*val pointSeries = SimpleXYSeries(mutableListOf(accelSolver.getDisplacement()), mutableListOf(accelSolver.getDisplacement()), "")
@@ -191,9 +194,9 @@ class MainActivity : AppCompatActivity()
             }
             listOf(R.id.timeDomainButton, R.id.velocityRangeButton) ->
             {
-                oneDimensionPlot.addSeries(formatter, accelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "V vs t"))
-                oneDimensionPlot.domainTitle.text = "Domain t"
-                oneDimensionPlot.rangeTitle.text = "Range V"
+                binding.oneDimensionPlot.addSeries(formatter, accelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "V vs t"))
+                binding.oneDimensionPlot.domainTitle.text = "Domain t"
+                binding.oneDimensionPlot.rangeTitle.text = "Range V"
 
                 /*val pointSeries = SimpleXYSeries("")
 
@@ -209,10 +212,10 @@ class MainActivity : AppCompatActivity()
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = accelSolver.getVelocityDisplacementXYSeries(minDomain, maxDomain, 100, "V vs Δx")
-                oneDimensionPlot.addSeries(formatter, seriesArray[0])
-                oneDimensionPlot.addSeries (formatter2, seriesArray.last())
-                oneDimensionPlot.domainTitle.text = "Domain Δx"
-                oneDimensionPlot.rangeTitle.text = "Range V"
+                binding.oneDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.oneDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.oneDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.oneDimensionPlot.rangeTitle.text = "Range V"
 
                 val xList = mutableListOf<Double>()
                 for (velocity in accelSolver.getFinalVelocities())
@@ -222,20 +225,20 @@ class MainActivity : AppCompatActivity()
 
                 oneDimensionPlot.addSeries(pointSeries, pointFormatter)*/
             }
-            else -> oneDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
+            else -> binding.oneDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
         }
 
-        oneDimensionPlot.redraw()
+        binding.oneDimensionPlot.redraw()
     }
 
 
     private fun formatOutputString(values: List<Double>): String
     {
-        var multiFormat = "%." + precisionPicker.value + "f"
+        var multiFormat = "%." + binding.precisionPicker.value + "f"
 
         for (i in 1 until values.size)
         {
-            multiFormat += ", %." + precisionPicker.value + "f"
+            multiFormat += ", %." + binding.precisionPicker.value + "f"
         }
 
         return String.format(multiFormat, *values.toTypedArray())
@@ -261,12 +264,12 @@ class MainActivity : AppCompatActivity()
         clearEditTextRecursive(view.rootView)
 
         solved = false
-        domainMinBox.setText("-1")
-        domainMaxBox.setText("1")
-        oneDimensionPlot.domainTitle.text = ""
-        oneDimensionPlot.rangeTitle.text = ""
-        oneDimensionPlot.clear()
-        oneDimensionPlot.redraw()
+        binding.domainMinBox.setText("-1")
+        binding.domainMaxBox.setText("1")
+        binding.oneDimensionPlot.domainTitle.text = ""
+        binding.oneDimensionPlot.rangeTitle.text = ""
+        binding.oneDimensionPlot.clear()
+        binding.oneDimensionPlot.redraw()
     }
 
     private fun clearEditTextRecursive(view: View)

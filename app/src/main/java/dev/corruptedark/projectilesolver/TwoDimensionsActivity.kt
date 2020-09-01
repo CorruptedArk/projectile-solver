@@ -33,6 +33,7 @@ import com.androidplot.xy.CatmullRomInterpolator
 import com.androidplot.xy.LineAndPointFormatter
 import com.androidplot.xy.SimpleXYSeries
 import com.androidplot.xy.XYSeries
+import dev.corruptedark.projectilesolver.databinding.ActivityTwoDimensionsBinding
 import kotlinx.android.synthetic.main.activity_main.precisionPicker
 import kotlinx.android.synthetic.main.activity_main.timeBox
 import kotlinx.android.synthetic.main.activity_two_dimensions.*
@@ -46,34 +47,36 @@ class TwoDimensionsActivity : AppCompatActivity() {
 
     private val xAccelSolver = ConstantAccelSolver()
     private val yAccelSolver = ConstantAccelSolver()
+    private lateinit var binding: ActivityTwoDimensionsBinding
 
     private var solved = false
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_two_dimensions)
+        binding = ActivityTwoDimensionsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
         val actionBar = supportActionBar
         actionBar!!.subtitle = "2D Solver"
         actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
-        precisionPicker.minValue = 1
-        precisionPicker.maxValue = Int.MAX_VALUE
-        precisionPicker.wrapSelectorWheel = false
+        binding.precisionPicker.minValue = 1
+        binding.precisionPicker.maxValue = Int.MAX_VALUE
+        binding.precisionPicker.wrapSelectorWheel = false
 
         window.navigationBarColor = Color.parseColor("#ff151515")
 
         solved = false
 
-        domainRadioGroup.check(R.id.timeDomainButton)
-        rangeRadioGroup.check(R.id.xDisplacementRangeButton)
+        binding.domainRadioGroup.check(R.id.timeDomainButton)
+        binding.rangeRadioGroup.check(R.id.xDisplacementRangeButton)
 
-        domainRadioGroup.setOnCheckedChangeListener { _, _ ->
+        binding.domainRadioGroup.setOnCheckedChangeListener { _, _ ->
             if (solved) {
                 updatePlot()
             }
         }
 
-        rangeRadioGroup.setOnCheckedChangeListener { _, _ ->
+        binding.rangeRadioGroup.setOnCheckedChangeListener { _, _ ->
             if (solved) {
                 updatePlot()
             }
@@ -88,69 +91,69 @@ class TwoDimensionsActivity : AppCompatActivity() {
             when (view.id) {
                 R.id.initVelAngleCheck -> {
                     if (checked) {
-                        initVelAngleBox.visibility = View.VISIBLE
-                        initVelDegree.visibility = View.VISIBLE
-                        initVelYLabel.visibility = View.GONE
-                        initVelYBox.visibility = View.GONE
-                        initVelXLabel.text = "Initial velocity V₀ = "
+                        binding.initVelAngleBox.visibility = View.VISIBLE
+                        binding.initVelDegree.visibility = View.VISIBLE
+                        binding.initVelYLabel.visibility = View.GONE
+                        binding.initVelYBox.visibility = View.GONE
+                        binding.initVelXLabel.text = "Initial velocity V₀ = "
                     } else {
-                        initVelAngleBox.visibility = View.GONE
-                        initVelDegree.visibility = View.GONE
-                        initVelYLabel.visibility = View.VISIBLE
-                        initVelYBox.visibility = View.VISIBLE
-                        initVelXLabel.text = "Initial velocity ˣV₀ = "
+                        binding.initVelAngleBox.visibility = View.GONE
+                        binding.initVelDegree.visibility = View.GONE
+                        binding.initVelYLabel.visibility = View.VISIBLE
+                        binding.initVelYBox.visibility = View.VISIBLE
+                        binding.initVelXLabel.text = "Initial velocity ˣV₀ = "
                     }
                 }
                 R.id.finalVelAngleCheck -> {
                     if (checked) {
-                        finalVelAngleBox.visibility = View.VISIBLE
-                        finalVelDegree.visibility = View.VISIBLE
-                        finalVelYLabel.visibility = View.GONE
-                        finalVelYBox.visibility = View.GONE
-                        finalVelXLabel.text = "Final velocity V₁ = "
+                        binding.finalVelAngleBox.visibility = View.VISIBLE
+                        binding.finalVelDegree.visibility = View.VISIBLE
+                        binding.finalVelYLabel.visibility = View.GONE
+                        binding.finalVelYBox.visibility = View.GONE
+                        binding.finalVelXLabel.text = "Final velocity V₁ = "
                     } else {
-                        finalVelAngleBox.visibility = View.GONE
-                        finalVelDegree.visibility = View.GONE
-                        finalVelYLabel.visibility = View.VISIBLE
-                        finalVelYBox.visibility = View.VISIBLE
-                        finalVelXLabel.text = "Final velocity ˣV₁ = "
+                        binding.finalVelAngleBox.visibility = View.GONE
+                        binding.finalVelDegree.visibility = View.GONE
+                        binding.finalVelYLabel.visibility = View.VISIBLE
+                        binding.finalVelYBox.visibility = View.VISIBLE
+                        binding.finalVelXLabel.text = "Final velocity ˣV₁ = "
                     }
 
                 }
                 R.id.displacementAngleCheck -> {
                     if (checked) {
-                        displacementAngleBox.visibility = View.VISIBLE
-                        displacementDegree.visibility = View.VISIBLE
-                        displacementYLabel.visibility = View.GONE
-                        displacementYBox.visibility = View.GONE
-                        displacementXLabel.text = "Displacement Δp = "
+                        binding.displacementAngleBox.visibility = View.VISIBLE
+                        binding.displacementDegree.visibility = View.VISIBLE
+                        binding.displacementYLabel.visibility = View.GONE
+                        binding.displacementYBox.visibility = View.GONE
+                        binding.displacementXLabel.text = "Displacement Δp = "
                     } else {
-                        displacementAngleBox.visibility = View.GONE
-                        displacementDegree.visibility = View.GONE
-                        displacementYLabel.visibility = View.VISIBLE
-                        displacementYBox.visibility = View.VISIBLE
-                        displacementXLabel.text = "Displacement Δx = "
+                        binding.displacementAngleBox.visibility = View.GONE
+                        binding.displacementDegree.visibility = View.GONE
+                        binding.displacementYLabel.visibility = View.VISIBLE
+                        binding.displacementYBox.visibility = View.VISIBLE
+                        binding.displacementXLabel.text = "Displacement Δx = "
                     }
                 }
                 R.id.accelerationAngleCheck -> {
                     if (checked) {
-                        accelerationAngleBox.visibility = View.VISIBLE
-                        accelerationDegree.visibility = View.VISIBLE
-                        accelerationYLabel.visibility = View.GONE
-                        accelerationYBox.visibility = View.GONE
-                        accelerationXLabel.text = "Acceleration α = "
+                        binding.accelerationAngleBox.visibility = View.VISIBLE
+                        binding.accelerationDegree.visibility = View.VISIBLE
+                        binding.accelerationYLabel.visibility = View.GONE
+                        binding.accelerationYBox.visibility = View.GONE
+                        binding.accelerationXLabel.text = "Acceleration α = "
                     } else {
-                        accelerationAngleBox.visibility = View.GONE
-                        accelerationDegree.visibility = View.GONE
-                        accelerationYLabel.visibility = View.VISIBLE
-                        accelerationYBox.visibility = View.VISIBLE
-                        accelerationXLabel.text = "Acceleration αˣ = "
+                        binding.accelerationAngleBox.visibility = View.GONE
+                        binding.accelerationDegree.visibility = View.GONE
+                        binding.accelerationYLabel.visibility = View.VISIBLE
+                        binding.accelerationYBox.visibility = View.VISIBLE
+                        binding.accelerationXLabel.text = "Acceleration αˣ = "
                     }
                 }
             }
 
             if (solved) {
-                if (initVelAngleCheck.isChecked) {
+                if (binding.initVelAngleCheck.isChecked) {
                     val angles = mutableListOf<Double>()
                     val velocities = mutableListOf<Double>()
                     for (xInitVelocity in xAccelSolver.getInitVelocities()) {
@@ -164,14 +167,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         }
                     }
 
-                    initVelAngleBox.setText(formatOutputString(angles.distinct()))
-                    initVelXBox.setText(formatOutputString(velocities.distinct()))
+                    binding.initVelAngleBox.setText(formatOutputString(angles.distinct()))
+                    binding.initVelXBox.setText(formatOutputString(velocities.distinct()))
                 } else {
-                    initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
-                    initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
+                    binding.initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
+                    binding.initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
                 }
 
-                if (finalVelAngleCheck.isChecked) {
+                if (binding.finalVelAngleCheck.isChecked) {
                     val angles = mutableListOf<Double>()
                     val velocities = mutableListOf<Double>()
                     for (xFinalVelocity in xAccelSolver.getFinalVelocities()) {
@@ -185,15 +188,15 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         }
                     }
 
-                    finalVelAngleBox.setText(formatOutputString(angles.distinct()))
-                    finalVelXBox.setText(formatOutputString(velocities.distinct()))
+                    binding.finalVelAngleBox.setText(formatOutputString(angles.distinct()))
+                    binding.finalVelXBox.setText(formatOutputString(velocities.distinct()))
                 } else {
-                    finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
-                    finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
+                    binding.finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
+                    binding.finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
                 }
 
 
-                if (displacementAngleCheck.isChecked) {
+                if (binding.displacementAngleCheck.isChecked) {
                     val xDisplacement = xAccelSolver.getDisplacement()
                     val yDisplacement = yAccelSolver.getDisplacement()
                     val displacement =
@@ -203,14 +206,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         angle += 2 * PI
                     }
 
-                    displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                    displacementXBox.setText(formatOutputString(listOf(displacement)))
+                    binding.displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                    binding.displacementXBox.setText(formatOutputString(listOf(displacement)))
                 } else {
-                    displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
-                    displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
+                    binding.displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
+                    binding.displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
                 }
 
-                if (accelerationAngleCheck.isChecked) {
+                if (binding.accelerationAngleCheck.isChecked) {
                     val xAcceleration = xAccelSolver.getAcceleration()
                     val yAcceleration = yAccelSolver.getAcceleration()
                     val acceleration =
@@ -220,11 +223,11 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         angle += 2 * PI
                     }
 
-                    accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                    accelerationXBox.setText(formatOutputString(listOf(acceleration)))
+                    binding.accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                    binding.accelerationXBox.setText(formatOutputString(listOf(acceleration)))
                 } else {
-                    accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
-                    accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
+                    binding.accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
+                    binding.accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
                 }
 
                 val times = mutableListOf<Double>()
@@ -232,7 +235,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 times.addAll(xAccelSolver.getTimes())
                 times.addAll(yAccelSolver.getTimes())
 
-                timeBox.setText(formatOutputString(times.distinct()))
+                binding.timeBox.setText(formatOutputString(times.distinct()))
             }
         }
     }
@@ -288,10 +291,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
 
 
         //Start collecting the values from the boxes
-        if (initVelAngleCheck.isChecked)
+        if (binding.initVelAngleCheck.isChecked)
         {
-            val initVelAngle = initVelAngleBox.text.toString().toDoubleOrNull()
-            val initVelocity = initVelXBox.text.toString().toDoubleOrNull()
+            val initVelAngle = binding.initVelAngleBox.text.toString().toDoubleOrNull()
+            val initVelocity = binding.initVelXBox.text.toString().toDoubleOrNull()
 
             if(anyAreNull(initVelAngle, initVelocity))
             {
@@ -306,14 +309,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
         }
         else
         {
-            initVelocityX = initVelXBox.text.toString().toDoubleOrNull()
-            initVelocityY = initVelYBox.text.toString().toDoubleOrNull()
+            initVelocityX = binding.initVelXBox.text.toString().toDoubleOrNull()
+            initVelocityY = binding.initVelYBox.text.toString().toDoubleOrNull()
         }
 
-        if (finalVelAngleCheck.isChecked)
+        if (binding.finalVelAngleCheck.isChecked)
         {
-            val finalVelAngle = finalVelAngleBox.text.toString().toDoubleOrNull()
-            val finalVelocity = finalVelXBox.text.toString().toDoubleOrNull()
+            val finalVelAngle = binding.finalVelAngleBox.text.toString().toDoubleOrNull()
+            val finalVelocity = binding.finalVelXBox.text.toString().toDoubleOrNull()
 
             if(anyAreNull(finalVelAngle, finalVelocity))
             {
@@ -328,14 +331,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
         }
         else
         {
-            finalVelocityX = finalVelXBox.text.toString().toDoubleOrNull()
-            finalVelocityY = finalVelYBox.text.toString().toDoubleOrNull()
+            finalVelocityX = binding.finalVelXBox.text.toString().toDoubleOrNull()
+            finalVelocityY = binding.finalVelYBox.text.toString().toDoubleOrNull()
         }
 
-        if (displacementAngleCheck.isChecked)
+        if (binding.displacementAngleCheck.isChecked)
         {
-            val displacementAngle = displacementAngleBox.text.toString().toDoubleOrNull()
-            val displacement = displacementXBox.text.toString().toDoubleOrNull()
+            val displacementAngle = binding.displacementAngleBox.text.toString().toDoubleOrNull()
+            val displacement = binding.displacementXBox.text.toString().toDoubleOrNull()
 
             if(anyAreNull(displacementAngle, displacement))
             {
@@ -350,14 +353,14 @@ class TwoDimensionsActivity : AppCompatActivity() {
         }
         else
         {
-            displacementX = displacementXBox.text.toString().toDoubleOrNull()
-            displacementY = displacementYBox.text.toString().toDoubleOrNull()
+            displacementX = binding.displacementXBox.text.toString().toDoubleOrNull()
+            displacementY = binding.displacementYBox.text.toString().toDoubleOrNull()
         }
 
-        if (accelerationAngleCheck.isChecked)
+        if (binding.accelerationAngleCheck.isChecked)
         {
-            val accelerationAngle = accelerationAngleBox.text.toString().toDoubleOrNull()
-            val acceleration = accelerationXBox.text.toString().toDoubleOrNull()
+            val accelerationAngle = binding.accelerationAngleBox.text.toString().toDoubleOrNull()
+            val acceleration = binding.accelerationXBox.text.toString().toDoubleOrNull()
 
             if(anyAreNull(accelerationAngle, acceleration))
             {
@@ -372,11 +375,11 @@ class TwoDimensionsActivity : AppCompatActivity() {
         }
         else
         {
-            accelerationX = accelerationXBox.text.toString().toDoubleOrNull()
-            accelerationY = accelerationYBox.text.toString().toDoubleOrNull()
+            accelerationX = binding.accelerationXBox.text.toString().toDoubleOrNull()
+            accelerationY = binding.accelerationYBox.text.toString().toDoubleOrNull()
         }
 
-        time = timeBox.text.toString().toDoubleOrNull()
+        time = binding.timeBox.text.toString().toDoubleOrNull()
         //End collecting of values from boxes
 
         var xValues = listOf(initVelocityX, finalVelocityX, displacementX, accelerationX, time)
@@ -432,7 +435,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         //Solve x values
                         xAccelSolver.findAllValues(initVelocityX, finalVelocityX, displacementX, accelerationX, time)
 
-                        if (initVelAngleCheck.isChecked)
+                        if (binding.initVelAngleCheck.isChecked)
                         {
                             val angles = mutableListOf<Double>()
                             val velocities = mutableListOf<Double>()
@@ -450,16 +453,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 }
                             }
 
-                            initVelAngleBox.setText(formatOutputString(angles.distinct()))
-                            initVelXBox.setText(formatOutputString(velocities.distinct()))
+                            binding.initVelAngleBox.setText(formatOutputString(angles.distinct()))
+                            binding.initVelXBox.setText(formatOutputString(velocities.distinct()))
                         }
                         else
                         {
-                            initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
-                            initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
+                            binding.initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
+                            binding.initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
                         }
 
-                        if (finalVelAngleCheck.isChecked)
+                        if (binding.finalVelAngleCheck.isChecked)
                         {
                             val angles = mutableListOf<Double>()
                             val velocities = mutableListOf<Double>()
@@ -477,17 +480,17 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 }
                             }
 
-                            finalVelAngleBox.setText(formatOutputString(angles.distinct()))
-                            finalVelXBox.setText(formatOutputString(velocities.distinct()))
+                            binding.finalVelAngleBox.setText(formatOutputString(angles.distinct()))
+                            binding.finalVelXBox.setText(formatOutputString(velocities.distinct()))
                         }
                         else
                         {
-                            finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
-                            finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
+                            binding.finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
+                            binding.finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
                         }
 
 
-                        if (displacementAngleCheck.isChecked)
+                        if (binding.displacementAngleCheck.isChecked)
                         {
                             val xDisplacement = xAccelSolver.getDisplacement()
                             val yDisplacement = yAccelSolver.getDisplacement()
@@ -498,16 +501,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 angle += 2 * PI
                             }
 
-                            displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                            displacementXBox.setText(formatOutputString(listOf(displacement)))
+                            binding.displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                            binding.displacementXBox.setText(formatOutputString(listOf(displacement)))
                         }
                         else
                         {
-                            displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
-                            displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
+                            binding.displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
+                            binding.displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
                         }
 
-                        if (accelerationAngleCheck.isChecked)
+                        if (binding.accelerationAngleCheck.isChecked)
                         {
                             val xAcceleration = xAccelSolver.getAcceleration()
                             val yAcceleration = yAccelSolver.getAcceleration()
@@ -518,13 +521,13 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 angle += 2 * PI
                             }
 
-                            accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                            accelerationXBox.setText(formatOutputString(listOf(acceleration)))
+                            binding.accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                            binding.accelerationXBox.setText(formatOutputString(listOf(acceleration)))
                         }
                         else
                         {
-                            accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
-                            accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
+                            binding.accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
+                            binding.accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
                         }
 
                         val times = mutableListOf<Double>()
@@ -532,7 +535,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         times.addAll(xAccelSolver.getTimes())
                         times.addAll(yAccelSolver.getTimes())
 
-                        timeBox.setText(formatOutputString(times.distinct()))
+                        binding.timeBox.setText(formatOutputString(times.distinct()))
                     }
                 }
                 else
@@ -570,7 +573,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         //Solve y values
                         yAccelSolver.findAllValues(initVelocityY, finalVelocityY, displacementY, accelerationY, time)
 
-                        if (initVelAngleCheck.isChecked)
+                        if (binding.initVelAngleCheck.isChecked)
                         {
                             val angles = mutableListOf<Double>()
                             val velocities = mutableListOf<Double>()
@@ -588,16 +591,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 }
                             }
 
-                            initVelAngleBox.setText(formatOutputString(angles.distinct()))
-                            initVelXBox.setText(formatOutputString(velocities.distinct()))
+                            binding.initVelAngleBox.setText(formatOutputString(angles.distinct()))
+                            binding.initVelXBox.setText(formatOutputString(velocities.distinct()))
                         }
                         else
                         {
-                            initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
-                            initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
+                            binding.initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
+                            binding.initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
                         }
 
-                        if (finalVelAngleCheck.isChecked)
+                        if (binding.finalVelAngleCheck.isChecked)
                         {
                             val angles = mutableListOf<Double>()
                             val velocities = mutableListOf<Double>()
@@ -615,17 +618,17 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 }
                             }
 
-                            finalVelAngleBox.setText(formatOutputString(angles.distinct()))
-                            finalVelXBox.setText(formatOutputString(velocities.distinct()))
+                            binding.finalVelAngleBox.setText(formatOutputString(angles.distinct()))
+                            binding.finalVelXBox.setText(formatOutputString(velocities.distinct()))
                         }
                         else
                         {
-                            finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
-                            finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
+                            binding.finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
+                            binding.finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
                         }
 
 
-                        if (displacementAngleCheck.isChecked)
+                        if (binding.displacementAngleCheck.isChecked)
                         {
                             val xDisplacement = xAccelSolver.getDisplacement()
                             val yDisplacement = yAccelSolver.getDisplacement()
@@ -636,16 +639,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 angle += 2 * PI
                             }
 
-                            displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                            displacementXBox.setText(formatOutputString(listOf(displacement)))
+                            binding.displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                            binding.displacementXBox.setText(formatOutputString(listOf(displacement)))
                         }
                         else
                         {
-                            displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
-                            displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
+                            binding.displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
+                            binding.displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
                         }
 
-                        if (accelerationAngleCheck.isChecked)
+                        if (binding.accelerationAngleCheck.isChecked)
                         {
                             val xAcceleration = xAccelSolver.getAcceleration()
                             val yAcceleration = yAccelSolver.getAcceleration()
@@ -656,13 +659,13 @@ class TwoDimensionsActivity : AppCompatActivity() {
                                 angle += 2 * PI
                             }
 
-                            accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                            accelerationXBox.setText(formatOutputString(listOf(acceleration)))
+                            binding.accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                            binding.accelerationXBox.setText(formatOutputString(listOf(acceleration)))
                         }
                         else
                         {
-                            accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
-                            accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
+                            binding.accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
+                            binding.accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
                         }
 
                         val times = mutableListOf<Double>()
@@ -670,7 +673,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         times.addAll(xAccelSolver.getTimes())
                         times.addAll(yAccelSolver.getTimes())
 
-                        timeBox.setText(formatOutputString(times.distinct()))
+                        binding.timeBox.setText(formatOutputString(times.distinct()))
                     }
                 }
                 else
@@ -688,7 +691,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 yAccelSolver.findAllValues(initVelocityY, finalVelocityY, displacementY, accelerationY, time)
 
                 //Format and output results
-                if (initVelAngleCheck.isChecked)
+                if (binding.initVelAngleCheck.isChecked)
                 {
                     val angles = mutableListOf<Double>()
                     val velocities = mutableListOf<Double>()
@@ -706,16 +709,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         }
                     }
 
-                    initVelAngleBox.setText(formatOutputString(angles.distinct()))
-                    initVelXBox.setText(formatOutputString(velocities.distinct()))
+                    binding.initVelAngleBox.setText(formatOutputString(angles.distinct()))
+                    binding.initVelXBox.setText(formatOutputString(velocities.distinct()))
                 }
                 else
                 {
-                    initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
-                    initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
+                    binding.initVelXBox.setText(formatOutputString(xAccelSolver.getInitVelocities()))
+                    binding.initVelYBox.setText(formatOutputString(yAccelSolver.getInitVelocities()))
                 }
 
-                if (finalVelAngleCheck.isChecked)
+                if (binding.finalVelAngleCheck.isChecked)
                 {
                     val angles = mutableListOf<Double>()
                     val velocities = mutableListOf<Double>()
@@ -733,17 +736,17 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         }
                     }
 
-                    finalVelAngleBox.setText(formatOutputString(angles.distinct()))
-                    finalVelXBox.setText(formatOutputString(velocities.distinct()))
+                    binding.finalVelAngleBox.setText(formatOutputString(angles.distinct()))
+                    binding.finalVelXBox.setText(formatOutputString(velocities.distinct()))
                 }
                 else
                 {
-                    finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
-                    finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
+                    binding.finalVelXBox.setText(formatOutputString(xAccelSolver.getFinalVelocities()))
+                    binding.finalVelYBox.setText(formatOutputString(yAccelSolver.getFinalVelocities()))
                 }
 
 
-                if (displacementAngleCheck.isChecked)
+                if (binding.displacementAngleCheck.isChecked)
                 {
                     val xDisplacement = xAccelSolver.getDisplacement()
                     val yDisplacement = yAccelSolver.getDisplacement()
@@ -754,16 +757,16 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         angle += 2 * PI
                     }
 
-                    displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                    displacementXBox.setText(formatOutputString(listOf(displacement)))
+                    binding.displacementAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                    binding.displacementXBox.setText(formatOutputString(listOf(displacement)))
                 }
                 else
                 {
-                    displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
-                    displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
+                    binding.displacementXBox.setText(formatOutputString(listOf(xAccelSolver.getDisplacement())))
+                    binding.displacementYBox.setText(formatOutputString(listOf(yAccelSolver.getDisplacement())))
                 }
 
-                if (accelerationAngleCheck.isChecked)
+                if (binding.accelerationAngleCheck.isChecked)
                 {
                     val xAcceleration = xAccelSolver.getAcceleration()
                     val yAcceleration = yAccelSolver.getAcceleration()
@@ -774,13 +777,13 @@ class TwoDimensionsActivity : AppCompatActivity() {
                         angle += 2 * PI
                     }
 
-                    accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
-                    accelerationXBox.setText(formatOutputString(listOf(acceleration)))
+                    binding.accelerationAngleBox.setText(formatOutputString(listOf(RAD_TO_DEG * angle)))
+                    binding.accelerationXBox.setText(formatOutputString(listOf(acceleration)))
                 }
                 else
                 {
-                    accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
-                    accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
+                    binding.accelerationXBox.setText(formatOutputString(listOf(xAccelSolver.getAcceleration())))
+                    binding.accelerationYBox.setText(formatOutputString(listOf(yAccelSolver.getAcceleration())))
                 }
 
                 val times = mutableListOf<Double>()
@@ -788,7 +791,7 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 times.addAll(xAccelSolver.getTimes())
                 times.addAll(yAccelSolver.getTimes())
 
-                timeBox.setText(formatOutputString(times.distinct()))
+                binding.timeBox.setText(formatOutputString(times.distinct()))
 
                 solved = true
             }
@@ -800,27 +803,27 @@ class TwoDimensionsActivity : AppCompatActivity() {
 
     private fun updatePlot()
     {
-        twoDimensionPlot.clear()
-        val minDomain = domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
-        val maxDomain = domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
+        binding.twoDimensionPlot.clear()
+        val minDomain = binding.domainMinBox.text.toString().toDoubleOrNull() ?: -1.0
+        val maxDomain = binding.domainMaxBox.text.toString().toDoubleOrNull() ?: 1.0
 
         val formatter = LineAndPointFormatter(Color.parseColor("#00A2FF"), null, null, null)
         formatter.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
 
-        when(listOf(domainRadioGroup.checkedRadioButtonId, rangeRadioGroup.checkedRadioButtonId))
+        when(listOf(binding.domainRadioGroup.checkedRadioButtonId, binding.rangeRadioGroup.checkedRadioButtonId))
         {
             listOf(R.id.timeDomainButton, R.id.xDisplacementRangeButton) ->
             {
-                twoDimensionPlot.addSeries(formatter, xAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
-                twoDimensionPlot.domainTitle.text = "Domain t"
-                twoDimensionPlot.rangeTitle.text = "Range Δx"
+                binding.twoDimensionPlot.addSeries(formatter, xAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δx vs t"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain t"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δx"
             }
             listOf(R.id.timeDomainButton, R.id.yDisplacementRangeButton) ->
             {
-                twoDimensionPlot.addSeries(formatter, yAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δy vs t"))
-                twoDimensionPlot.domainTitle.text = "Domain t"
-                twoDimensionPlot.rangeTitle.text = "Range Δy"
+                binding.twoDimensionPlot.addSeries(formatter, yAccelSolver.getDisplacementTimeXYSeries(minDomain, maxDomain, 100, "Δy vs t"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain t"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δy"
             }
             listOf(R.id.xDisplacementDomainButton, R.id.xDisplacementRangeButton) ->
             {
@@ -829,9 +832,9 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 for (i in 0..size)
                     samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
 
-                twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δx vs Δx"))
-                twoDimensionPlot.domainTitle.text = "Domain Δx"
-                twoDimensionPlot.rangeTitle.text = "Range Δx"
+                binding.twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δx vs Δx"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δx"
             }
             listOf(R.id.yDisplacementDomainButton, R.id.yDisplacementRangeButton) ->
             {
@@ -840,21 +843,21 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 for (i in 0..size)
                     samplesList.add(minDomain + i.toDouble()/size.toDouble()*abs(maxDomain - minDomain))
 
-                twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δy vs Δy"))
-                twoDimensionPlot.domainTitle.text = "Domain Δy"
-                twoDimensionPlot.rangeTitle.text = "Range Δy"
+                binding.twoDimensionPlot.addSeries(formatter, SimpleXYSeries(samplesList, samplesList, "Δy vs Δy"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δy"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δy"
             }
             listOf(R.id.timeDomainButton, R.id.xVelocityRangeButton) ->
             {
-                twoDimensionPlot.addSeries(formatter, xAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ˣV vs t"))
-                twoDimensionPlot.domainTitle.text = "Domain t"
-                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+                binding.twoDimensionPlot.addSeries(formatter, xAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ˣV vs t"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain t"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ˣV"
             }
             listOf(R.id.timeDomainButton, R.id.yVelocityRangeButton) ->
             {
-                twoDimensionPlot.addSeries(formatter, yAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ʸV vs t"))
-                twoDimensionPlot.domainTitle.text = "Domain t"
-                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+                binding.twoDimensionPlot.addSeries(formatter, yAccelSolver.getVelocityTimeXYSeries(minDomain, maxDomain, 100, "ʸV vs t"))
+                binding.twoDimensionPlot.domainTitle.text = "Domain t"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ʸV"
             }
             listOf(R.id.xDisplacementDomainButton, R.id.xVelocityRangeButton) ->
             {
@@ -862,10 +865,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = xAccelSolver.getVelocityDisplacementXYSeries(minDomain, maxDomain, 100, "ˣV vs Δx")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δx"
-                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ˣV"
             }
             listOf(R.id.yDisplacementDomainButton, R.id.yVelocityRangeButton) ->
             {
@@ -873,10 +876,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = yAccelSolver.getVelocityDisplacementXYSeries(minDomain, maxDomain, 100, "ʸV vs Δy")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δy"
-                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δy"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ʸV"
             }
             listOf(R.id.xDisplacementDomainButton, R.id.yDisplacementRangeButton) ->
             {
@@ -884,10 +887,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = xAccelSolver.getDisplacementDisplacementTwoAxisXYSeries(yAccelSolver, minDomain, maxDomain, 100, "Δy vs Δx")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δx"
-                twoDimensionPlot.rangeTitle.text = "Range Δy"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δy"
             }
             listOf(R.id.yDisplacementDomainButton, R.id.xDisplacementRangeButton) ->
             {
@@ -895,10 +898,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = yAccelSolver.getDisplacementDisplacementTwoAxisXYSeries(xAccelSolver, minDomain, maxDomain, 100, "Δx vs Δy")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δy"
-                twoDimensionPlot.rangeTitle.text = "Range Δx"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δy"
+                binding.twoDimensionPlot.rangeTitle.text = "Range Δx"
             }
             listOf(R.id.xDisplacementDomainButton, R.id.yVelocityRangeButton) ->
             {
@@ -906,10 +909,10 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = xAccelSolver.getVelocityDisplacementTwoAxisXYSeries(yAccelSolver, minDomain, maxDomain, 100, "ʸV vs Δx")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δx"
-                twoDimensionPlot.rangeTitle.text = "Range ʸV"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δx"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ʸV"
             }
             listOf(R.id.yDisplacementDomainButton, R.id.xVelocityRangeButton) ->
             {
@@ -917,25 +920,25 @@ class TwoDimensionsActivity : AppCompatActivity() {
                 formatter2.interpolationParams = CatmullRomInterpolator.Params(10, CatmullRomInterpolator.Type.Centripetal)
 
                 val seriesArray = yAccelSolver.getVelocityDisplacementTwoAxisXYSeries(xAccelSolver, minDomain, maxDomain, 100, "ˣV vs Δy")
-                twoDimensionPlot.addSeries(formatter, seriesArray[0])
-                twoDimensionPlot.addSeries (formatter2, seriesArray.last())
-                twoDimensionPlot.domainTitle.text = "Domain Δy"
-                twoDimensionPlot.rangeTitle.text = "Range ˣV"
+                binding.twoDimensionPlot.addSeries(formatter, seriesArray[0])
+                binding.twoDimensionPlot.addSeries (formatter2, seriesArray.last())
+                binding.twoDimensionPlot.domainTitle.text = "Domain Δy"
+                binding.twoDimensionPlot.rangeTitle.text = "Range ˣV"
             }
-            else -> twoDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
+            else -> binding.twoDimensionPlot.addSeries(formatter, SimpleXYSeries(""))
         }
 
-        twoDimensionPlot.redraw()
+        binding.twoDimensionPlot.redraw()
     }
 
 
     private fun formatOutputString(values: List<Double>): String
     {
-        var multiFormat = "%." + precisionPicker.value + "f"
+        var multiFormat = "%." + binding.precisionPicker.value + "f"
 
         for (i in 1 until values.size)
         {
-            multiFormat += ", %." + precisionPicker.value + "f"
+            multiFormat += ", %." + binding.precisionPicker.value + "f"
         }
 
         return String.format(multiFormat, *values.toTypedArray())
@@ -946,12 +949,12 @@ class TwoDimensionsActivity : AppCompatActivity() {
         clearEditTextRecursive(view.rootView)
         solved = false
 
-        domainMinBox.setText("-1")
-        domainMaxBox.setText("1")
-        twoDimensionPlot.domainTitle.text = ""
-        twoDimensionPlot.rangeTitle.text = ""
-        twoDimensionPlot.clear()
-        twoDimensionPlot.redraw()
+        binding.domainMinBox.setText("-1")
+        binding.domainMaxBox.setText("1")
+        binding.twoDimensionPlot.domainTitle.text = ""
+        binding.twoDimensionPlot.rangeTitle.text = ""
+        binding.twoDimensionPlot.clear()
+        binding.twoDimensionPlot.redraw()
     }
 
     private fun clearEditTextRecursive(view: View)

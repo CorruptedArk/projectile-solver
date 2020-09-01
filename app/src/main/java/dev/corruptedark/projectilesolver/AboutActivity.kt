@@ -28,27 +28,59 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.method.LinkMovementMethod
+import android.text.method.MovementMethod
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollableColumn
+import androidx.compose.foundation.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.material.Colors
+import androidx.compose.material.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.LayoutModifier
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.setContent
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.AnnotatedString
 import kotlinx.android.synthetic.main.activity_about.*
+import androidx.compose.ui.graphics.Color as ComposeColor
 
 class AboutActivity : AppCompatActivity() {
 
+    //private lateinit var binding: ActivityAboutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_about)
+
+        //binding = ActivityAboutBinding.inflate(layoutInflater)
+        //setContentView(binding.root)
+        setContent {
+            AboutLayout()
+        }
 
         val actionBar = supportActionBar
         actionBar!!.subtitle = "About"
-        actionBar!!.setDisplayHomeAsUpEnabled(true)
-        actionBar!!.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
+        actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar.setBackgroundDrawable(ColorDrawable(Color.parseColor("#FF232323")))
         window.statusBarColor = Color.parseColor("#ff151515")
-
         window.navigationBarColor = Color.parseColor("#ff151515")
 
-        val versionName = BuildConfig.VERSION_NAME
-        githubLinkText.movementMethod = LinkMovementMethod.getInstance()
-        githubLinkText.linksClickable = true
-        aboutText.text = resources.getString(R.string.about_info, versionName)
+    }
 
+    @Composable
+    private fun AboutLayout(
+        backgroundColor: ComposeColor = ComposeColor(0xff494949)
+    )
+    {
+        Surface(color = backgroundColor) {
+            ScrollableColumn(Modifier.fillMaxSize()) {
+                Image(vectorResource(R.drawable.ic_icon), Modifier.fillMaxWidth())
+                Text(getString(R.string.github_link), color = ComposeColor.White)
+                Text(AnnotatedString(getString(R.string.about_info, BuildConfig.VERSION_NAME)), color = ComposeColor.White)
+            }
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -56,3 +88,4 @@ class AboutActivity : AppCompatActivity() {
         return true
     }
 }
+
